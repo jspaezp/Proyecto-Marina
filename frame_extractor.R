@@ -30,12 +30,19 @@ for (i in inputfiles) {
       
 }
 
+system(paste("for i in ", 
+             directory, 
+             "/*/dir* " ,
+             "; do convert $i/*.jpeg -adjoin $i/aStack.tiff; done" , 
+             sep = "")
+)
+
 setwd(directory)
 end.time <- Sys.time()
 time.taken <- end.time - start.time
 time.taken
 
-# 
+
 # system("tree -L 1 | cat")
 # 
 # system("tree ./MVI_7654 -L 1 | head -20 |cat")
@@ -44,5 +51,4 @@ time.taken
 
 
 ## ImageJ
-#se genra el macro para aumentar la velocidad de las mediciones, falta medir, y generar el script
-#apra traer los datos sacados de las mediciones
+# falta medir

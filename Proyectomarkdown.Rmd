@@ -17,6 +17,8 @@ inputfiles
 
 ```
 
+#Extraccion de Imagenes
+
 Teniendo como resultado de el anterior comando tenemos una lista de los archivos .MOV de el directorio, la cual es leida en R y convertida a una variable de tipo vector con el siguiente comando:
 
 Y mediante el sigueinte, por cada uno de los archivos anteriormente mencionados, se genera una carpeta con su nombre, dentro de esta se generan 6 imagenes en formato jpeg, las reduce de tamaño de 1080 pixeles de ancho y finalmente las organiza en sub-carpetas, cada una con 100 imagenes
@@ -45,6 +47,26 @@ time.taken
       
 ```
 
+#"Stacking" de imagenes
+
+Posteriormente se guardan las imagenes de cada una de las carpetas en formato tiff para ser usados en ImageJ (programa de analisis de imagenes)
+
+```{r,}
+start.time <- Sys.time()
+
+system(paste("for i in ", 
+             directory, 
+             "/*/dir* " ,
+             "; do convert $i/*.jpeg -adjoin $i/aStack.tiff; done" , 
+             sep = "")
+)
+
+end.time <- Sys.time()
+time.taken <- end.time - start.time
+time.taken
+
+```
+
 
 Aca podemos ver como es la estructura de carpetas en el directorio
 
@@ -71,5 +93,5 @@ cat(system("tree ./MVI_7654 -L 2 | head -15 | cat ", intern = TRUE), sep = "\n")
 cat("          ...\n")
 cat(system("tree ./MVI_7654 -L 2 | tail -10 | cat ", intern = TRUE), sep = "\n")
 
-
 ```
+
