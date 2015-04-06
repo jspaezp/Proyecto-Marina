@@ -1,11 +1,11 @@
 ---
-title: "Analisis de los datos de olas"
+title: "Procesamiento de Videos de Olas"
 author: "Juan Sebastian Paez"
 date: "10.03.2015"
 output: html_document
 ---
 
-Se parte de una carpeta que contiene los videos tomados del patron de oleaje (en este caso con extension ".mov"), dentro de un entorno Unix (idealmente linux)
+Se parte de una carpeta que contiene los videos tomados del patron de oleaje (en este caso con extension ".mov"), dentro de un entorno Unix (idealmente linux, con los programas ffmpeg e imagemagick instalados)
 
 
 ```{r}
@@ -92,6 +92,29 @@ Y los archivos dentro de estas
 cat(system("tree ./MVI_7654 -L 2 | head -15 | cat ", intern = TRUE), sep = "\n")
 cat("          ...\n")
 cat(system("tree ./MVI_7654 -L 2 | tail -10 | cat ", intern = TRUE), sep = "\n")
+
+```
+
+
+
+#Sofware Utilizado
+
+R, en Fedora (sistema Operativo)
+
+```{r, results='hold'}
+version
+```
+
+
+ImageMagick
+```{r, results='hold'}
+cat(system("convert -version  | cat ", intern = TRUE), sep = "\n")
+
+```
+
+FFmpeg
+```{r, results='hold'} 
+cat(system("ffmpeg -version  | cat ", intern = TRUE), sep = "\n")
 
 ```
 

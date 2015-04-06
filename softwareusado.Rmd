@@ -1,0 +1,29 @@
+---
+title: "Software Usado"
+author: "jspp"
+date: "06.04.2015"
+output: html_document
+---
+
+
+#Sofware Utilizado
+
+R, en Fedora (sistema Operativo)
+
+```{r, results='hold'}
+version
+```
+
+
+ImageMagick
+```{r, results='hold'}
+cat(system("convert -version  | cat ", intern = TRUE), sep = "\n")
+
+```
+
+FFmpeg
+```{r, results='hold'} 
+cat(system("ffmpeg -version  | cat ", intern = TRUE), sep = "\n")
+
+```
+
