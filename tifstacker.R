@@ -1,4 +1,4 @@
-#Stacks images into tiff files, one stack per sub-folder generated beforehand
+#Stacks images into tiff files, one stack per sub-folder generated beforehand, and changes the name of the files to the video serial and the folder index, z.B "7654_001.tiff"
 
 start.time <- Sys.time()
 
@@ -9,22 +9,24 @@ system(paste("for i in ",
              sep = "")
 )
 
-
-tiffs <- system(paste("for i in ", 
+oldnames <- system(paste("for i in ", 
                       directory, 
                       "/*/dir*/*.tiff " ,
                       "; do echo $i ; done" , 
                       sep = ""), intern = TRUE
 )
+newnames <- oldnames
 
-newnames <- gsub( paste(directorio, "MVI_", sep = "") , "" , tiffs)
-newnames <-gsub( "dir" , "" , newnames)
-newnames <-gsub( "aStack" , "" , newnames)
-newnames <-gsub( "/" , "" , newnames)
-newnames <-paste(gsub("aStack.tiff" , "" , tiffs), newnames, sep = "")
+for (i in c(paste(directorio, "MVI_", sep = ""),
+                  "dir" ,  
+                  "aStack" ,
+                  "/")
+     ) { newnames <- gsub( i , "" , newnames) }
 
-for (i in c(1:length(tiffs))) {
-      system(paste("mv", tiffs[i], newnames[i])) 
+newnames <-paste(gsub("aStack.tiff" , "" , oldnames), newnames, sep = "")
+
+for (i in c(1:length(oldnames))) {
+      system(paste("mv", oldnames[i], newnames[i])) 
 }
 
 
