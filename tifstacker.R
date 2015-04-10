@@ -2,30 +2,22 @@
 
 start.time <- Sys.time()
 
+directory <- "/home/sebastian/Documents/2015/Unal/Marina/Proyecto_Personal/"
+
 system(paste("for i in ", 
              directory, 
-             "/*/dir* " ,
+             "*/dir* " ,
              "; do convert $i/*.jpeg -adjoin $i/aStack.tiff; done" , 
              sep = "")
 )
 
-oldnames <- system(paste("for i in ", 
-                      directory, 
-                      "/*/dir*/*.tiff " ,
-                      "; do echo $i ; done" , 
-                      sep = ""), intern = TRUE
-)
-newnames <- oldnames
+oldnames <- system("pwd | find | grep \".tiff\" ", intern = TRUE)
 
-for (i in c(paste(directorio, "MVI_", sep = ""),
-                  "dir" ,  
-                  "aStack" ,
-                  "/")
-     ) { newnames <- gsub( i , "" , newnames) }
+newnames <- gsub(".*MVI_|aStack|/|dir" ,"", oldnames)
 
 newnames <-paste(gsub("aStack.tiff" , "" , oldnames), newnames, sep = "")
 
-for (i in c(1:length(oldnames))) {
+for ( i in c( 1:length(oldnames) )  ) {
       system(paste("mv", oldnames[i], newnames[i])) 
 }
 
