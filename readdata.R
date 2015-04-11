@@ -1,10 +1,10 @@
-## AHORA SI ANALISIS DE DATOS ... bueno la verdad solo lectura de las tablas y union de las mismas
+## lee y organiza la informacion a modo R-legible
 
 start.time <- Sys.time()
 
 require(data.table)
 require(dplyr)
-
+require(tidyr)
 
 
 
@@ -21,6 +21,12 @@ for ( i in c(1:length(measurements)) ) {
       alldata <- rbind(alldata, get(VariableNames[i])) 
 }
 
+importantdata <- alldata %>% 
+                  separate(Label, c("Video","Directorio","tiff","Slice2"))
+importantdata <- importantdata[,.(Y,Video,Directorio, Slice)]
+importantdata <-mutate(importantdata, Directorio = as.numeric(Directorio))
+importantdata <- importantdata %>% 
+                  mutate( Consecutivo = 100*(Directorio) + Slice - 100)
 
 end.time <- Sys.time()
 time.taken <- end.time - start.time
