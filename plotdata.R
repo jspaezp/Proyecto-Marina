@@ -10,13 +10,23 @@ require(tidyr)
 
 importantdata[,Y] %>% fft() %>% abs() %>% specgram(32, Fs = 6)
 qplot(data = importantdata,y = Y, Consecutivo)
-yfiltrado <- importantdata[,Y] %>% fftfilt(rep(1,10)/10, .) 
 
-mutate(importantdata, yfiltrado = (importantdata[,Y] %>%
-                                    fftfilt(rep(1,10)/10, .)
-                                   )
-)
+filternumber <- 30 
+for (i in c(1:filternumber)) {
+importantdata <- importantdata[,Y] %>% fftfilt(rep(1,i)/i, .) %>% cbind(importantdata, .)
+}
 
-importantdata %>% setorder(. , Consecutivo) ## Mucho mas improtante de lo que parece
-importantdata[,Y] %>% fftfilt(rep(1,3)/3, .) %>% plot()
+setnames(importantdata, 6:(length(importantdata)), as.character(c(1:filternumber)))
+
+
+melteddata <- melt(importantdata, 
+                   id.vars = c(1:5),
+                   measure.vars = as.character(c(1:filternumber)), 
+                   variable.name = "AnchoDeFiltro") %>% 
+            data.table 
+
+
+ggplot(melteddata , aes(y = value, x = Consecutivo, colour = AnchoDeFiltro)) + 
+      geom_line() + xlim(17, 400) + ylim(250, 330)
+
  
