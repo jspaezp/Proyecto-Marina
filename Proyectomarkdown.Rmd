@@ -111,10 +111,9 @@ cat(system("tree -L 3 | tail | cat", intern = TRUE), sep = "\n")
 
 #Sofware Utilizado
 
-R, en Fedora (sistema Operativo)
 
 ```{r, results='hold'}
-version
+sessionInfo()
 ```
 
 

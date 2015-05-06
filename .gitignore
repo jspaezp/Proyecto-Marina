@@ -1,2 +1,4 @@
 # .gitignore Proyecto-Marina
 data/
+.Rproj.user
+Proyecto-Marina.Rproj
