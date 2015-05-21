@@ -1,4 +1,11 @@
 # .gitignore Proyecto-Marina
 data/
 .Rproj.user
+.Rhistory
 Proyecto-Marina.Rproj
+**.html
+**.jpg
+**.jpeg
+**.MOV
+.html
+Proyectomarkdown_cache/*
