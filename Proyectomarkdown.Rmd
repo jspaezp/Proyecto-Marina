@@ -9,7 +9,7 @@ Se parte de una carpeta (directorio) que contiene los videos tomados del patron 
 
 
 ```{r}
-directory <- "/home/sebastian/Documents/2015/Unal/Marina/Proyecto_Personal/"
+directory <- "/home/sebastian/Documents/2015/Unal/Marina/Proyecto-Marina/data"
 setwd(directory)
 dir()
 inputfiles <- system("ls -a | grep \".MOV\" ", intern = TRUE)
@@ -100,11 +100,11 @@ cat(system("tree -L 1 | cat ", intern = TRUE), sep = "\n")
 
 Como estan organizados los archivos y las carpetas internas
 
-```{r}
+```{r, results='hold'}
 
-cat(system("tree -L 3 | head -15 | cat", intern = TRUE), sep = "\n")
+cat(system("tree -L 5 | head -15 | cat", intern = TRUE), sep = "\n")
 cat("          ...\n")
-cat(system("tree -L 3 | tail | cat", intern = TRUE), sep = "\n")
+cat(system("tree -L 5 | tail | cat", intern = TRUE), sep = "\n")
 
 
 ```
