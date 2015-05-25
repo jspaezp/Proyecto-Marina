@@ -3,14 +3,76 @@ start.time <- Sys.time()
 
 require(ggplot2)
 require(signal)
-install.packages("audio", "rgl", "rpanel")
 require(seewave) # esta en prueba, puede que sea util
 
 require(data.table)
 require(dplyr)
 require(tidyr)
 
-importantdata[,Y] %>% fft() %>% abs() %>% specgram(32, Fs = 6)
+directory <- "/home/sebastian/Documents/2015/Unal/Marina/Proyecto-Marina/data"
+
+importantdata <- read.table(paste(directory, "/importantdata.txt", sep = ""),
+                            #sep = "\t",
+                            header = TRUE
+                            ) %>% data.table
+
+spliteddata <- importantdata[, list(list(.SD)), by = Video]$V1
+names(spliteddata) <- unique(importantdata$Video)
+
+filternumber <- 15 
+meltedata <- spliteddata
+
+for (i in c(1:length(spliteddata))) {
+  for (a in c(1:filternumber)) {
+    spliteddata[[i]] <- (spliteddata[[i]])[,X] %>%
+      fftfilt(rep(1,a)/a, .) %>% 
+      cbind(spliteddata[[i]], .)
+  }
+  setnames(spliteddata[[i]], 6:(length(spliteddata[[i]])), 
+           paste("F", c(1:filternumber), sep = ""))
+   meltedata[[i]] <- melt(spliteddata[[i]], 
+        id.vars = c(1:5),
+        measure.vars = paste("F", c(1:filternumber), sep = ""), 
+        variable.name = "AnchoDeFiltro") %>%
+    tbl_df
+}
+
+wholetiddydata <- data.table()
+
+for (i in c(names(meltedata))) {
+  wholetiddydata <- 
+  mutate(meltedata[[i]], Video = i) %>%
+    bind_rows(wholetiddydata)
+}
+
+write.table(wholetiddydata ,
+            file = "./wholetiddydata.txt" , 
+            row.names = FALSE, 
+            sep = "\t"
+)
+
+
+g <- ggplot(wholetiddydata , 
+            aes(y = value, x = Consecutivo, colour = AnchoDeFiltro)) + 
+  geom_line() + 
+  facet_grid( Video ~ . )
+g
+ggsave("todofiltro.png", g, width=40, height=30)
+
+########## pendiente normalizar datos por media
+
+importantdata  %>% group_by(Video) 
+
+
+select(importantdata, X, Video, Consecutivo)  %>% 
+  sapply(. , as.numeric) %>%  
+  data.table %>% 
+  group_by(., Video)  %>% 
+  select(X) %>% 
+  fft()  %>% 
+  abs()
+
+importantdata[,X] %>% fft() %>% abs() %>% specgram(64, Fs = 6)
 qplot(data = importantdata,y = Y, Consecutivo)
 
 filternumber <- 30 

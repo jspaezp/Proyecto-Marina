@@ -8,9 +8,9 @@ require(tidyr)
 
 
 
-directory <- "/home/sebastian/Documents/2015/Unal/Marina/Proyecto_Personal/"
+directory <- "/home/sebastian/Documents/2015/Unal/Marina/Proyecto-Marina/data"
 setwd(directory)
-measurements <- system("pwd |find | grep \".txt\" ", intern = TRUE)
+measurements <- system("pwd |find ./*/*.txt", intern = TRUE)
 VariableNames <- gsub(".*/|.txt|_" ,"", measurements) %>% 
                   paste("V" , . , sep = "") 
 alldata <- data.table()
@@ -24,13 +24,20 @@ for ( i in c(1:length(measurements)) ) {
 }
 
 importantdata <- alldata %>% data.table %>%
-                  separate(Label, c("Video","Directorio","tiff","Slice2"))
-importantdata <- importantdata[,.(Y,Video,Directorio, Slice)]
-importantdata <- mutate(importantdata, Directorio = as.numeric(Directorio))
+                  separate(Label, c("Directorio","Directorio2","Video","Carpeta.video","tiff","Slice2"))
+importantdata <- importantdata[,.(Y,X,Video,Slice, Carpeta.video)]
+importantdata <- mutate(importantdata, Carpeta.video = as.numeric(Carpeta.video))
+importantdata <- mutate(importantdata, Slice = as.numeric(Slice))
 importantdata <- importantdata %>% 
-                  mutate( Consecutivo = 100*(Directorio) + Slice - 100)
+                  mutate( Consecutivo = 100*(Carpeta.video) + Slice - 100)
 
 importantdata %>% setorder(. , Consecutivo) ## Mucho mas improtante de lo que parece
+
+write.table(importantdata ,
+            file = "./importantdata.txt" , 
+            row.names = FALSE, 
+            sep = "\t"
+            )
 
 
 end.time <- Sys.time()
